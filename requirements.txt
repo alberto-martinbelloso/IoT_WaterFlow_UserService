@@ -1,0 +1,6 @@
+bson
+werkzeug
+Flask==1.0.2
+Flask-JWT
+pymongo
+mongoengine==0.10.6

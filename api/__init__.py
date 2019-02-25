@@ -3,10 +3,10 @@ from flask import Flask
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
 
-from authentication.User import User
-from authentication.mongo import mongo_blueprint, db_collection
-from water_flow.influx import influx_blueprint
-from water_flow.waterflow import waterflow_blueprint
+from api.auth.User import User
+from api.auth.mongo import mongo_blueprint, db_collection
+from api.waterflow.influx import influx_blueprint
+from api.waterflow.waterflow import waterflow_blueprint
 
 
 def find_user(u, username):

@@ -3,31 +3,9 @@ from api.mongo import db
 from flask_jwt import current_identity
 import datetime
 
-vexpr = {"$jsonSchema":
-    {
-        "bsonType": "object",
-        "required": ["device_id", "threshold"],
-        "properties": {
-            "device_id": {
-                "bsonType": "string",
-                "description": "must be a string and is required"
-            },
-            "threshold": {
-                "bsonType": "number",
-                "description": "must be a number and is required"
-            },
-
-            "created": {
-                "bsonType": "string",
-                "description": "must be a string and is required"
-            },
-        }
-    }
-}
-keys = {'device_id', 'threshold'}
 
 if 'devices' not in db.collection_names():
-    db.create_collection('devices', validator={'validator': vexpr})
+    db.create_collection('devices')
 
 col = db['devices']
 

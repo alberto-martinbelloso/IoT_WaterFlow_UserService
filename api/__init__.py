@@ -2,17 +2,11 @@ from bson import ObjectId
 from flask import Flask
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
-
-from api.auth.User import User
-from api.mongo import mongo_blueprint, db_collection
+from api.auth.User import User, find_user
+from api.mongo import mongo_blueprint, db
 from api.waterflow.influx import influx_blueprint
 from api.waterflow.waterflow import waterflow_blueprint
-
-
-def find_user(u, username):
-    for user in u:
-        if user["username"].encode('utf-8') == username:
-            return user
+from api.devices import devices
 
 
 def authenticate(username, password):
@@ -32,8 +26,9 @@ app.config['SECRET_KEY'] = 'super-secret'
 app.register_blueprint(mongo_blueprint)
 app.register_blueprint(waterflow_blueprint)
 app.register_blueprint(influx_blueprint)
+app.register_blueprint(devices)
 
-_collection = db_collection()
+_collection = db["users"]
 _users = _collection.find({})
 
 jwt = JWT(app, authenticate, identity)

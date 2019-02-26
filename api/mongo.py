@@ -3,11 +3,8 @@ import pymongo
 
 mongo_blueprint = Blueprint('mongo', __name__)
 
-def db_collection():
-    client = pymongo.MongoClient("mongodb://localhost:27017/")
-    db = client["app"]
-    col = db["users"]
-    return col
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+db = client["app"]
 
 
 @mongo_blueprint.route('/mongo_status')

@@ -47,12 +47,15 @@ def post_device(data):
 
 
 def get_device():
-    devices = find_devices(current_identity['devices'])
+    devices = find_devices(current_identity['devices'], current_identity['role'])
     return jsonify({
         'devices': devices,
         'count': len(devices)
     }), 200
 
 
-def find_devices(devices):
-    return list(col.find({"device_id": {"$in": devices}}, {'_id': False}))
+def find_devices(devices, role):
+    if role == 'admin':
+        return list(col.find({},{'_id': False}))
+    else:
+        return list(col.find({'device_id': {'$in': devices}}, {'_id': False}))

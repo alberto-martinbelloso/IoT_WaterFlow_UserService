@@ -1,6 +1,5 @@
 from flask import jsonify
 from api.mongo import db
-from flask_jwt import current_identity
 import datetime
 
 if 'devices' not in db.collection_names():
@@ -23,7 +22,7 @@ def post_device(data):
 
 
 def get_device():
-    devices = find_devices(current_identity['devices'], current_identity['role'])
+    devices = find_devices(["2"],'admin')
     return jsonify({
         'devices': devices,
         'count': len(devices)

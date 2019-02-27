@@ -1,22 +1,20 @@
-import atexit
-
-from api.bills.Scheduler import *
 from bson import ObjectId
 from flask import Flask
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
-
-from api.auth.User import User
-from api.bills import bills_blueprint
+from api.auth.User import User, find_user
 from api.mongo import mongo_blueprint, db
+from api.bills import bills_blueprint
+from api.bills.Scheduler import Scheduler
+from api.bills.generate_bills import job
 from api.waterflow.influx import influx_blueprint
 from api.waterflow.waterflow import waterflow_blueprint
-from api.bills.generate_bills import job
+from api.devices import devices
 
 
 def find_user(u, username):
     for user in u:
-        if user["username"].encode('utf-8') == username:
+        if user["username"].encode('utf-8') == username.encode('utf-8'):
             return user
 
 
@@ -38,6 +36,7 @@ app.register_blueprint(mongo_blueprint)
 app.register_blueprint(waterflow_blueprint)
 app.register_blueprint(influx_blueprint)
 app.register_blueprint(bills_blueprint)
+app.register_blueprint(devices)
 
 _collection = db["users"]
 _users = _collection.find({})

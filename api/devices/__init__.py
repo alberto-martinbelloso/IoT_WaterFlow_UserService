@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from api.devices.devices import *
+from api.devices.devices import get_device, post_device
 
 devices = Blueprint('devices', __name__)
 

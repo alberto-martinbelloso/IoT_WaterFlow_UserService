@@ -1,7 +1,10 @@
+from bson import ObjectId
 from flask import Flask
+from werkzeug.security import safe_str_cmp
+from api.model_user import User
 from api.mongo import mongo_blueprint, db
 from api.devices import devices_blueprint
-from flask_jwt import JWT, jwt_required
+from flask_jwt import JWT, jwt_required, current_identity
 import os
 
 secret = 'super-secret'

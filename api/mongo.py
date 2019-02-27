@@ -1,9 +1,18 @@
 from flask import Blueprint
 import pymongo
+import os
 
 mongo_blueprint = Blueprint('mongo', __name__)
 
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+host = "mongodb://localhost:27017/"
+
+try:
+    if os.environ["DEPLOY"]:
+        host = os.environ["MONGO_HOST"]
+except Exception as e:
+    print("Running on develop environment")
+
+client = pymongo.MongoClient(f"{host}")
 db = client["app"]
 
 

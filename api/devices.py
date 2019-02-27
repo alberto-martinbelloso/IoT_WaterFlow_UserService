@@ -1,11 +1,17 @@
-from flask import jsonify
+from flask import Blueprint, request, jsonify
 from api.mongo import db
 import datetime
 
-if 'devices' not in db.collection_names():
-    db.create_collection('devices')
-
+devices_blueprint = Blueprint('devices', __name__)
 col = db['devices']
+
+
+@devices_blueprint.route('/devices', methods=['GET', 'POST'])
+def platform_devices():
+    if request.method == 'POST':
+        return post_device(request.get_json())
+    else:
+        return get_device()
 
 
 def post_device(data):
@@ -22,7 +28,7 @@ def post_device(data):
 
 
 def get_device():
-    devices = find_devices(["2"],'admin')
+    devices = find_devices(["2"], 'admin')
     return jsonify({
         'devices': devices,
         'count': len(devices)

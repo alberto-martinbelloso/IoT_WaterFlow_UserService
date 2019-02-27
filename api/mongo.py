@@ -27,4 +27,4 @@ def get_device(device_id):
 
 @mongo_blueprint.route('/mongo_status')
 def mongo():
-    return db.serverStatus()
+    return 'OK'

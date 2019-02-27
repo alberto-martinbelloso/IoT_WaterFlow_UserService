@@ -10,7 +10,7 @@ import os
 secret = 'super-secret'
 try:
     if os.environ["DEPLOY"]:
-        host = os.environ["SECRET"]
+        secret = os.environ["SECRET"]
 except:
     print('INFO | Development secret key')
 

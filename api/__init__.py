@@ -45,7 +45,6 @@ _collection = db["users"]
 _users = _collection.find({})
 
 # JWT
-jwt = JWT(app, authenticate, identity)
 
 @app.route("/")
 def hello():
@@ -53,6 +52,5 @@ def hello():
 
 
 @app.route('/protected')
-@jwt_required()
 def protected():
     return '%s' % current_identity

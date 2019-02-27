@@ -10,8 +10,8 @@ import os
 secret = 'super-secret'
 try:
     if os.environ["DEPLOY"]:
-        secret = os.environ["SECRET"]
-except:
+        secret = str(os.environ["SECRET"])
+except ValueError:
     print('INFO | Development secret key')
 
 
@@ -45,6 +45,7 @@ _collection = db["users"]
 _users = _collection.find({})
 
 # JWT
+jwt = JWT(app, authenticate, identity)
 
 @app.route("/")
 def hello():
@@ -52,5 +53,6 @@ def hello():
 
 
 @app.route('/protected')
+@jwt_required()
 def protected():
     return '%s' % current_identity

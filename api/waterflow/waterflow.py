@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-from water_flow.influx import get_measurements
+from api.waterflow.influx import get_measurements
 
 waterflow_blueprint = Blueprint('waterflow', __name__)
 

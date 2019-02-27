@@ -2,16 +2,19 @@ from bson import ObjectId
 from flask import Flask
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
-
-from authentication.User import User
-from authentication.mongo import mongo_blueprint, db_collection
-from water_flow.influx import influx_blueprint
-from water_flow.waterflow import waterflow_blueprint
+from api.auth.User import User, find_user
+from api.mongo import mongo_blueprint, db
+from api.bills import bills_blueprint
+from api.bills.Scheduler import Scheduler
+from api.bills.generate_bills import job
+from api.waterflow.influx import influx_blueprint
+from api.waterflow.waterflow import waterflow_blueprint
+from api.devices import devices
 
 
 def find_user(u, username):
     for user in u:
-        if user["username"].encode('utf-8') == username:
+        if user["username"].encode('utf-8') == username.encode('utf-8'):
             return user
 
 
@@ -32,11 +35,17 @@ app.config['SECRET_KEY'] = 'super-secret'
 app.register_blueprint(mongo_blueprint)
 app.register_blueprint(waterflow_blueprint)
 app.register_blueprint(influx_blueprint)
+app.register_blueprint(bills_blueprint)
+app.register_blueprint(devices)
 
-_collection = db_collection()
+_collection = db["users"]
 _users = _collection.find({})
 
 jwt = JWT(app, authenticate, identity)
+
+scheduler = Scheduler()
+scheduler.every(1).second.do(job)
+scheduler.run_continuously(5)
 
 
 @app.route('/protected')

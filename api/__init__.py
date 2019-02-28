@@ -4,7 +4,7 @@ from api.devices import devices_blueprint
 from api.models import User, find_user
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
-
+from bson import ObjectId
 # create and configure the app
 
 
@@ -22,10 +22,12 @@ def authenticate(username, password):
 
 def identity(payload):
     user_id = payload['identity']
-    return _collection.find_one({'_id': user_id})
+    print(user_id)
+    return _collection.find_one({'_id': ObjectId(user_id)})
 
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'super-secret'
 
 app.register_blueprint(mongo_blueprint)
 app.register_blueprint(devices_blueprint)

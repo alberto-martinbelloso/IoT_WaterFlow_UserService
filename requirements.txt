@@ -4,7 +4,6 @@ itsdangerous==0.24
 Jinja2==2.10
 MarkupSafe==1.0
 Werkzeug==0.14.1
-pymongo
-bson
-Flask-JWT
-influxdb
+pymongo==3.7.2
+bson==0.5.8
+influxdb==5.2.1

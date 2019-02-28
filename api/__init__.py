@@ -9,12 +9,13 @@ from api.bills import bills_blueprint
 from api.mongo import mongo_blueprint, db
 from api.waterflow.influx import influx_blueprint
 from api.waterflow.waterflow import waterflow_blueprint
+from api.devices import devices
 from api.bills.generate_bills import job
 
 
 def find_user(u, username):
     for user in u:
-        if user["username"].encode('utf-8') == username:
+        if user["username"].encode('utf-8') == username.encode('utf-8'):
             return user
 
 
@@ -37,6 +38,7 @@ app.register_blueprint(waterflow_blueprint)
 app.register_blueprint(influx_blueprint)
 app.register_blueprint(bills_blueprint)
 app.register_blueprint(create_user_blueprint)
+app.register_blueprint(devices)
 
 _collection = db["users"]
 _users = _collection.find({})

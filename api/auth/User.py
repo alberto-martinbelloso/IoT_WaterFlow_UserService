@@ -9,3 +9,9 @@ class User(object):
 
     def __str__(self):
         return "User(id='%s')" % self.id
+
+
+def find_user(u, username):
+    for user in u:
+        if user["username"].encode('utf-8') == username.encode('utf-8'):
+            return user

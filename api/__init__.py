@@ -5,6 +5,8 @@ from api.models import User, find_user
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
 from bson import ObjectId
+
+
 # create and configure the app
 
 
@@ -15,12 +17,18 @@ def find_user(u, username):
 
 
 def authenticate(username, password):
+    _collection = db["users"]
+    _users = _collection.find({})
+
     user = find_user(_users, username)
     if user and safe_str_cmp(user["password"].encode('utf-8'), password.encode('utf-8')):
         return User(user)
 
 
 def identity(payload):
+    _collection = db["users"]
+    _users = _collection.find({})
+
     user_id = payload['identity']
     return _collection.find_one({'_id': ObjectId(user_id)})
 
@@ -31,14 +39,13 @@ app.config['SECRET_KEY'] = 'super-secret'
 app.register_blueprint(mongo_blueprint)
 app.register_blueprint(devices_blueprint)
 
-_collection = db["users"]
-_users = _collection.find({})
-
 jwt = JWT(app, authenticate, identity)
+
 
 @app.route("/")
 def hello():
     return "Hello World!"
+
 
 @app.route('/protected')
 @jwt_required()

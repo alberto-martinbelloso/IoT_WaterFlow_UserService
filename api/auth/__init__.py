@@ -9,7 +9,6 @@ from api.auth.User import User
 
 create_user_blueprint = Blueprint('create_user', __name__)
 
-
 def validate_user(user):
     is_valid = True
     errors = ""
@@ -34,11 +33,12 @@ def validate_user(user):
 
     return is_valid, errors
 
+import pdb
 
 @create_user_blueprint.route('/user', methods=['POST'])
 @jwt_required()
 def new_user():
-    is_admin = current_identity["role"].encode('utf-8') == "admin"
+    is_admin = current_identity["role"] == "admin"
     if is_admin:
         user = User(json.loads(request.data))
         is_valid, errors = validate_user(user)

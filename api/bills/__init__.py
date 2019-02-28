@@ -9,8 +9,8 @@ bills_blueprint = Blueprint('bills', __name__)
 @bills_blueprint.route('/bills')
 @jwt_required()
 def display_bills():
-    logged_user = current_identity["username"].encode('utf-8')
-    is_admin = current_identity["role"].encode('utf-8') == "admin"
+    logged_user = str(current_identity["username"])
+    is_admin = str(current_identity["role"]) == "admin"
 
     if is_admin:
         _bills = get_all_bills()

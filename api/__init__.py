@@ -3,6 +3,7 @@ from flask import Flask
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
 
+from api.auth import create_user_blueprint
 from api.auth.User import User
 from api.bills import bills_blueprint
 from api.mongo import mongo_blueprint, db
@@ -35,6 +36,7 @@ app.register_blueprint(mongo_blueprint)
 app.register_blueprint(waterflow_blueprint)
 app.register_blueprint(influx_blueprint)
 app.register_blueprint(bills_blueprint)
+app.register_blueprint(create_user_blueprint)
 
 _collection = db["users"]
 _users = _collection.find({})

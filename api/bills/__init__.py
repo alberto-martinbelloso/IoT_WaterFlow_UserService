@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify
 from flask_jwt import current_identity, jwt_required
 
 from api.bills.bills import get_bills, get_all_bills
@@ -8,7 +8,7 @@ bills_blueprint = Blueprint('bills', __name__)
 
 @bills_blueprint.route('/bills')
 @jwt_required()
-def water():
+def display_bills():
     logged_user = current_identity["username"].encode('utf-8')
     is_admin = current_identity["role"].encode('utf-8') == "admin"
 

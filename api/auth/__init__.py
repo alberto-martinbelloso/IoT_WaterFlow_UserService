@@ -1,5 +1,5 @@
 from api.auth.model import User, find_user
-from api.mongo import mongo_blueprint, db
+from api.mongo import db
 from werkzeug.security import safe_str_cmp
 from bson import ObjectId
 

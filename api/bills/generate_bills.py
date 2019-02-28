@@ -7,12 +7,12 @@ from api.waterflow.influx import get_measurements
 
 
 def job():
+    print("Running job")
     today = datetime.date.today()
     last_day = datetime.date.fromtimestamp(1551350759)  # 28 Feb
     if calendar.monthrange(today.year, today.month)[1] == today.day:
         first_day = datetime.date.today().replace(day=1)
         generate_bill(first_day, today)
-    print("passing")
 
 
 def generate_bill(from_day, to_day):

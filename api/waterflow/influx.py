@@ -4,15 +4,12 @@ from flask import Blueprint, jsonify
 from influxdb import InfluxDBClient
 
 influx_blueprint = Blueprint('Influxdb', __name__)
-host = "104.214.38.82"
+# host = "104.214.38.82"
+host = "localhost"
 port = 8086
 database = "waterflow"
 
 client = InfluxDBClient(host=host, port=port, database=database)
-
-
-def unix_time_millis(dt):
-    return (dt - time).total_seconds() * 1000.0
 
 
 def get_measurements(dev_id, f, t, origin):

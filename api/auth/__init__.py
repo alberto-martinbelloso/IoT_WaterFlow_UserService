@@ -26,6 +26,11 @@ def validate_user(user):
     if not isinstance(user.devices, list):
         errors += "devices must be a list \n"
         is_valid = False
+    else:
+        for value in user.devices:
+            if not isinstance(value, str):
+                errors += "device ids must be strings \n"
+                is_valid = False
 
     return is_valid, errors
 
@@ -35,15 +40,13 @@ def validate_user(user):
 def new_user():
     is_admin = current_identity["role"].encode('utf-8') == "admin"
     if is_admin:
-        req_body = request.data
-        user = User(json.loads(req_body))
+        user = User(json.loads(request.data))
         is_valid, errors = validate_user(user)
         if is_valid:
-            db.users.insert(user.__dict__)
-            result = True
-            if result:
+            try:
+                db.users.insert(user.__dict__)
                 return "User created"
-            else:
+            except:
                 return "User creation failed"
         else:
             return errors

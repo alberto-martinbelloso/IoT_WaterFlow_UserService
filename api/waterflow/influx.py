@@ -1,19 +1,32 @@
+from datetime import time
+
+from flask import Blueprint, jsonify
 from influxdb import InfluxDBClient
-from flask import Flask, Blueprint
 
 influx_blueprint = Blueprint('Influxdb', __name__)
-host = "localhost"
+host = "104.214.38.82"
 port = 8086
 database = "waterflow"
 
 client = InfluxDBClient(host=host, port=port, database=database)
 
 
-def get_measurements(dev_id, f, t):
-    query = "SELECT * FROM flow WHERE time >= %s and time <=%s and devid <> \"%s\"" % (f, t, dev_id)
-    results = client.query(query)
+def unix_time_millis(dt):
+    return (dt - time).total_seconds() * 1000.0
+
+
+def get_measurements(dev_id, f, t, origin):
+    q = "SELECT * FROM waterflow.autogen.flow WHERE dev_id='{}' AND time >= {} AND time <= {}".format(dev_id, f, t)
+    results = client.query(q)
     points = results.get_points()
-    measurements = ""
+    measurements = []
     for point in points:
-        measurements += "%s, %s, %i \n" % (point['time'], point['devid'], point["value"])
-    return measurements
+        measurements.append({
+            "time": point["time"],
+            "dev_id": point["dev_id"],
+            "value": point["value"]
+        })
+    if origin is "job":
+        return measurements
+    else:
+        return jsonify(measurements)

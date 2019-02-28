@@ -1,6 +1,3 @@
-import atexit
-
-from api.bills.Scheduler import *
 from bson import ObjectId
 from flask import Flask
 from flask_jwt import JWT, jwt_required, current_identity
@@ -43,10 +40,6 @@ _collection = db["users"]
 _users = _collection.find({})
 
 jwt = JWT(app, authenticate, identity)
-
-scheduler = Scheduler()
-scheduler.every(1).second.do(job)
-scheduler.run_continuously(5)
 
 
 @app.route('/protected')

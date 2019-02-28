@@ -1,21 +1,15 @@
-from flask import Blueprint, request, jsonify
+from flask import jsonify
 from api.mongo import db
+from flask_jwt import current_identity
 import datetime
 
-devices_blueprint = Blueprint('devices', __name__)
+
 col = db['devices']
 
 
-@devices_blueprint.route('/devices', methods=['GET', 'POST'])
-def platform_devices():
-    if request.method == 'POST':
-        return post_device(request.get_json())
-    else:
-        return get_device()
-
-
 def post_device(data):
-    data['created'] = str(datetime.datetime.now())
+    now = datetime.datetime.now()
+    data['created'] = str(now)
     col.insert(data)
 
     resp = jsonify({
@@ -28,7 +22,7 @@ def post_device(data):
 
 
 def get_device():
-    devices = find_devices(["2"], 'admin')
+    devices = find_devices(current_identity['devices'], current_identity['role'])
     return jsonify({
         'devices': devices,
         'count': len(devices)
@@ -37,6 +31,6 @@ def get_device():
 
 def find_devices(devices, role):
     if role == 'admin':
-        return list(col.find({}, {'_id': False}))
+        return list(col.find({},{'_id': False}))
     else:
         return list(col.find({'device_id': {'$in': devices}}, {'_id': False}))

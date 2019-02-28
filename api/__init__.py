@@ -22,7 +22,7 @@ def authenticate(username, password):
 
 def identity(payload):
     user_id = payload['identity']
-    return _collection.find_one({'_id': ObjectId(user_id)})
+    return _collection.find_one({'_id': user_id})
 
 
 app = Flask(__name__)

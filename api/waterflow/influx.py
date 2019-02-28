@@ -1,5 +1,5 @@
 from influxdb import InfluxDBClient
-from flask import  Blueprint
+from flask import Blueprint
 import os
 
 influx_blueprint = Blueprint('Influxdb', __name__)
@@ -19,10 +19,11 @@ client = InfluxDBClient(host=host, port=port, database=database)
 
 
 def get_measurements(dev_id, f, t):
-    query = "SELECT * FROM flow WHERE time >= %s and time <=%s and devid <> \"%s\"" % (f, t, dev_id)
+    query = "SELECT * FROM flow WHERE dev_id='{}' AND time >= {} AND time <= {}".format(dev_id, f, t)
+    print(query)
     results = client.query(query)
     points = results.get_points()
-    measurements = ""
+    measurements = []
     for point in points:
-        measurements += "%s, %s, %i \n" % (point['time'], point['devid'], point["value"])
+        measurements.append(point)
     return measurements

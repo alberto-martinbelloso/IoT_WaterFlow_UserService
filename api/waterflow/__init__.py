@@ -1,10 +1,9 @@
 from flask import Blueprint
 from api.waterflow.influx import get_measurements
-from flask import request, abort
+from flask import request, abort, jsonify
 from datetime import datetime
 
 import calendar
-import time
 
 waterflow_blueprint = Blueprint('waterflow', __name__)
 
@@ -17,14 +16,14 @@ def water(device_id=None):
         if f is None:
             return abort(400)
         else:
-            f = datetime.utcfromtimestamp(int(f))
+            f = datetime.utcfromtimestamp(int(f)).timestamp()
             if t is None:
-                t = datetime.utcfromtimestamp(dt2ts(datetime.now()))
+                t = datetime.utcfromtimestamp(dt2ts(datetime.now())).timestamp()
             else:
-                t = datetime.utcfromtimestamp(int(t))
+                t = datetime.utcfromtimestamp(int(t)).timestamp()
 
-            measures = get_measurements(device_id, f, t)
-            return measures
+            measures = get_measurements(device_id, int(f) * 1000000000, int(t) * 1000000000)
+            return jsonify(measures)
     except Exception as e:
         return abort(400)
 

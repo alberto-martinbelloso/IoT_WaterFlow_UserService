@@ -20,7 +20,6 @@ client = InfluxDBClient(host=host, port=port, database=database)
 
 def get_measurements(dev_id, f, t):
     query = "SELECT * FROM flow WHERE dev_id='{}' AND time >= {} AND time <= {}".format(dev_id, f, t)
-    print(query)
     results = client.query(query)
     points = results.get_points()
     measurements = []

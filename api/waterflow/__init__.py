@@ -23,7 +23,6 @@ def water(device_id=None):
                 t = datetime.utcfromtimestamp(dt2ts(datetime.now())).timestamp()
             else:
                 t = datetime.utcfromtimestamp(int(t)).timestamp()
-
             if current_identity['role'] != 'admin':
                 measures = get_measurements(device_id, int(f) * 1000000000, int(t) * 1000000000)
             else:
@@ -33,6 +32,7 @@ def water(device_id=None):
                     measures = get_measurements(device_id, int(f) * 1000000000, int(t) * 1000000000)
             return jsonify(measures)
     except Exception as e:
+        print(e)
         return abort(400)
 
 

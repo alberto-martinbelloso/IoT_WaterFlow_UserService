@@ -41,10 +41,10 @@ app = Flask(__name__)
 
 app.register_blueprint(mongo_blueprint)
 app.register_blueprint(devices_blueprint)
-app.register_blueprint(influx_blueprint)
-
-_collection = db["users"]
-_users = _collection.find({})
+# app.register_blueprint(influx_blueprint)
+#
+# _collection = db["users"]
+# _users = _collection.find({})
 
 # JWT
 # jwt = JWT(app, authenticate, identity)

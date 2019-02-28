@@ -1,3 +1,5 @@
+validate_email
+apscheduler
 schedule
 bson
 werkzeug

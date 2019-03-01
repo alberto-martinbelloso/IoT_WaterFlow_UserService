@@ -1,7 +1,6 @@
 click==6.7
 validate_email
 apscheduler
-werkzeug
 Flask==1.0.2
 itsdangerous==0.24
 Jinja2==2.10

@@ -33,7 +33,6 @@ app.register_blueprint(devices_blueprint)
 app.register_blueprint(waterflow_blueprint)
 app.register_blueprint(bills_blueprint)
 app.register_blueprint(create_user_blueprint)
-app.register_blueprint(devices)
 
 _collection = db["users"]
 _users = _collection.find({})

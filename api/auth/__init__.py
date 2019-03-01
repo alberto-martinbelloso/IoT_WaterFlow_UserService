@@ -5,6 +5,7 @@ from bson import ObjectId
 from validate_email import validate_email
 from flask import Blueprint, request
 from flask_jwt import current_identity, jwt_required
+import json
 
 create_user_blueprint = Blueprint('create_user', __name__)
 
@@ -30,7 +31,7 @@ def identity(payload):
 
     user_id = payload['identity']
     return _collection.find_one({'_id': ObjectId(user_id)})
-import json
+
 
 
 
@@ -58,7 +59,6 @@ def validate_user(user):
 
     return is_valid, errors
 
-import pdb
 
 @create_user_blueprint.route('/user', methods=['POST'])
 @jwt_required()

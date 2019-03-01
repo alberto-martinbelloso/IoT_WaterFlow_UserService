@@ -17,14 +17,6 @@ client = pymongo.MongoClient(f"{host}")
 db = client["app"]
 
 
-def get_device(device_id):
-    try:
-        col = db['devices']
-        return col.find_one({"device_id":device_id},{"_id":False})
-    except:
-        return None
-
-
 @mongo_blueprint.route('/mongo_status')
 def mongo():
     return 'OK'

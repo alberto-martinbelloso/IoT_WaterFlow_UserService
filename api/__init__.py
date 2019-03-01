@@ -5,6 +5,14 @@ from api.auth import identity, find_user, authenticate
 from api.waterflow import waterflow_blueprint
 from flask_jwt import JWT, jwt_required, current_identity
 
+from api.auth import create_user_blueprint
+from api.auth.model import User
+from api.bills import bills_blueprint
+from api.mongo import mongo_blueprint, db
+from api.devices import devices
+from api.bills.generate_bills import job
+
+
 import os
 # create and configure the app
 
@@ -23,6 +31,12 @@ app.config['SECRET_KEY'] = secret
 app.register_blueprint(mongo_blueprint)
 app.register_blueprint(devices_blueprint)
 app.register_blueprint(waterflow_blueprint)
+app.register_blueprint(bills_blueprint)
+app.register_blueprint(create_user_blueprint)
+app.register_blueprint(devices)
+
+_collection = db["users"]
+_users = _collection.find({})
 
 jwt = JWT(app, authenticate, identity)
 

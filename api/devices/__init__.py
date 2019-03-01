@@ -13,4 +13,4 @@ def platform_devices():
             return jsonify({'message': 'Invalid action'}), 401
         return post_device(request.get_json())
     else:
-        return get_device()
+        return get_devices()

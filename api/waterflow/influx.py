@@ -1,8 +1,7 @@
 from influxdb import InfluxDBClient
-from flask import Blueprint
+from flask import jsonify
 import os
 
-influx_blueprint = Blueprint('Influxdb', __name__)
 host = "localhost"
 port = 8086
 database = "waterflow"
@@ -18,11 +17,18 @@ except Exception as e:
 client = InfluxDBClient(host=host, port=port, database=database)
 
 
-def get_measurements(dev_id, f, t):
-    query = "SELECT * FROM flow WHERE dev_id='{}' AND time >= {} AND time <= {}".format(dev_id, f, t)
-    results = client.query(query)
+def get_measurements(dev_id, f, t, origin=""):
+    q = "SELECT * FROM waterflow.autogen.flow WHERE dev_id='{}' AND time >= {} AND time <= {}".format(dev_id, f, t)
+    results = client.query(q)
     points = results.get_points()
     measurements = []
     for point in points:
-        measurements.append(point)
-    return measurements
+        measurements.append({
+            "time": point["time"],
+            "dev_id": point["dev_id"],
+            "value": point["value"]
+        })
+    if origin is "job":
+        return measurements
+    else:
+        return jsonify(measurements)

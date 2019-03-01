@@ -20,7 +20,7 @@ def post_device(data):
     return resp
 
 
-def get_device():
+def get_devices():
     devices = find_devices(current_identity['devices'], current_identity['role'])
     return jsonify({
         'devices': devices,
@@ -33,3 +33,10 @@ def find_devices(devices, role):
         return list(col.find({}, {'_id': False}))
     else:
         return list(col.find({'device_id': {'$in': devices}}, {'_id': False}))
+
+
+def get_single_device(device_id):
+    try:
+        return col.find_one({"device_id": device_id}, {"_id": False})
+    except:
+        return None

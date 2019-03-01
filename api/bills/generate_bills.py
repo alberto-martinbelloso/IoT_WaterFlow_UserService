@@ -4,7 +4,7 @@ import calendar
 from api import User
 from api.bills.models import Bill
 from api.mongo import db
-from api.waterflow.influx import get_measurements
+from api.waterflow.waterflow import get_measurements
 
 
 def job():

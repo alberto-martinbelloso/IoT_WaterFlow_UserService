@@ -1,5 +1,5 @@
 from flask import Blueprint
-from api.waterflow.influx import get_measurements
+from api.waterflow.waterflow import get_measurements
 from flask import request, abort, jsonify
 from datetime import datetime
 from flask_jwt import jwt_required, current_identity

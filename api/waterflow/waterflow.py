@@ -1,20 +1,5 @@
-from influxdb import InfluxDBClient
 from flask import jsonify
-import os
-
-host = "localhost"
-port = 8086
-database = "waterflow"
-
-host = 'localhost'
-
-try:
-    if os.environ["DEPLOY"]:
-        host = os.environ["INFLUX_HOST"]
-except Exception as e:
-    print("Running on develop environment")
-
-client = InfluxDBClient(host=host, port=port, database=database)
+from api.influx import client
 
 
 def get_measurements(dev_id, f, t, origin=""):

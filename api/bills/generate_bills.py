@@ -2,12 +2,13 @@ import datetime
 import calendar
 
 from api import User
+from api.bills.models import Bill
 from api.mongo import db
-from api.waterflow.influx import get_measurements
+from api.waterflow.waterflow import get_measurements
 
 
 def job():
-    print("Running job")
+    print("INFO | Running job")
     today = datetime.date.today()
     last_day = datetime.date.fromtimestamp(1551350759)  # 28 Feb
     if calendar.monthrange(today.year, today.month)[1] == today.day:
@@ -44,25 +45,3 @@ def generate_bill(from_day, to_day):
             }
 
             db.bills.insert(insert_json)
-
-
-class Bill(object):
-    def __init__(self, user, from_date, to_date):
-        self.user_id = user.id
-        self.username = user.username
-        self.from_date = from_date
-        self.to_date = to_date
-        self.devices = user.devices
-        self.measurements = dict()
-        self.waterflow = 0
-        self.price = 0
-
-    def fill_measurements(self, dev_id, measurements):
-        if id not in self.measurements:
-            self.measurements[dev_id] = []
-        for measurement in measurements:
-            self.measurements[dev_id].append({
-                "value": measurement["value"],
-                "time": measurement["time"],
-            })
-

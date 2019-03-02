@@ -1,6 +1,5 @@
 from flask import Blueprint, jsonify
 from flask_jwt import current_identity, jwt_required
-
 from api.bills.bills import get_bills, get_all_bills
 
 bills_blueprint = Blueprint('bills', __name__)

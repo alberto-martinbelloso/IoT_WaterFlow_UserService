@@ -1,13 +1,39 @@
-import json
-
+from api.auth.model import User, find_user
+from api.mongo import db
+from werkzeug.security import safe_str_cmp
+from bson import ObjectId
 from validate_email import validate_email
 from flask import Blueprint, request
 from flask_jwt import current_identity, jwt_required
-
-from api.mongo import db
-from api.auth.User import User
+import json
 
 create_user_blueprint = Blueprint('create_user', __name__)
+
+
+def find_user(u, username):
+    for user in u:
+        if user["username"].encode('utf-8') == username.encode('utf-8'):
+            return user
+
+
+def authenticate(username, password):
+    _collection = db["users"]
+    _users = _collection.find({})
+
+    user = find_user(_users, username)
+    if user and safe_str_cmp(user["password"].encode('utf-8'), password.encode('utf-8')):
+        return User(user)
+
+
+def identity(payload):
+    _collection = db["users"]
+    _users = _collection.find({})
+
+    user_id = payload['identity']
+    return _collection.find_one({'_id': ObjectId(user_id)})
+
+
+
 
 def validate_user(user):
     is_valid = True
@@ -33,7 +59,6 @@ def validate_user(user):
 
     return is_valid, errors
 
-import pdb
 
 @create_user_blueprint.route('/user', methods=['POST'])
 @jwt_required()

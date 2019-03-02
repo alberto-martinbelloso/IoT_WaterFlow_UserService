@@ -27,7 +27,7 @@ def generate_bill(from_day, to_day):
         bill = Bill(u, from_day, to_day)
 
         for device in u.devices:
-            measurements = get_measurements(device, f, t, "job")
+            measurements = get_measurements(device, f, t, None, "job")
             bill.fill_measurements(device, measurements)
 
             total = 0

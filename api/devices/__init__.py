@@ -2,10 +2,10 @@ from flask import Blueprint, request
 from api.devices.devices import *
 from flask_jwt import jwt_required
 
-devices = Blueprint('devices', __name__)
+devices_blueprint = Blueprint('devices_blueprint', __name__)
 
 
-@devices.route('/devices', methods=['GET', 'POST'])
+@devices_blueprint.route('/devices', methods=['GET', 'POST'])
 @jwt_required()
 def platform_devices():
     if request.method == 'POST':
@@ -13,4 +13,4 @@ def platform_devices():
             return jsonify({'message': 'Invalid action'}), 401
         return post_device(request.get_json())
     else:
-        return get_device()
+        return get_devices()

@@ -1,12 +1,19 @@
-from flask import Blueprint
-
-from api.waterflow.influx import get_measurements
-
-waterflow_blueprint = Blueprint('waterflow', __name__)
+from flask import jsonify
+from api.influx import client
 
 
-@waterflow_blueprint.route('/waterflow/device_id=<dev_id>&from=<f>&to=<t>')
-def water(dev_id=None, f=None, t=None):
-    # http://127.0.0.1:5000/waterflow/device_id=0&from=1550000000000000000&to=1551112831000000000
-    measures = get_measurements(dev_id, f, t)
-    return measures
+def get_measurements(dev_id, f, t, origin=""):
+    q = "SELECT * FROM waterflow.autogen.flow WHERE dev_id='{}' AND time >= {} AND time <= {}".format(dev_id, f, t)
+    results = client.query(q)
+    points = results.get_points()
+    measurements = []
+    for point in points:
+        measurements.append({
+            "time": point["time"],
+            "dev_id": point["dev_id"],
+            "value": point["value"]
+        })
+    if origin is "job":
+        return measurements
+    else:
+        return jsonify(measurements)

@@ -1,10 +1,11 @@
-from flask import Blueprint
 import pymongo
 import os
+from flask import Blueprint
 
-mongo_blueprint = Blueprint('mongo', __name__)
+mongo_blueprint = Blueprint('mongo_blueprint', __name__)
 
-host = "mongodb://localhost:27017/"
+
+host = 'localhost'
 
 try:
     if os.environ["DEPLOY"]:
@@ -18,4 +19,4 @@ db = client["app"]
 
 @mongo_blueprint.route('/mongo_status')
 def mongo():
-    return "OK"
+    return 'OK'

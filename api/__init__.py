@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from api.mongo import mongo_blueprint, db
 from api.devices import devices_blueprint
 from api.auth import identity, find_user, authenticate
@@ -13,8 +13,8 @@ from api.mongo import mongo_blueprint, db
 from api.devices import devices
 from api.bills.generate_bills import job
 
-
 import os
+
 # create and configure the app
 
 secret = 'super-secret'
@@ -24,7 +24,6 @@ try:
         secret = os.environ["SECRET"]
 except Exception as e:
     print("Running on develop environment")
-
 
 app = Flask(__name__)
 CORS(app)
@@ -51,4 +50,8 @@ def hello():
 @app.route('/protected')
 @jwt_required()
 def protected():
-    return '%s' % current_identity
+    return jsonify({
+        'username': current_identity['username'],
+        'role': current_identity['role'],
+        'devices': current_identity['devices']
+    })

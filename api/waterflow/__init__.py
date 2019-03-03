@@ -23,15 +23,14 @@ def water(device_id=None):
             measures = []
             if current_identity['role'] == 'admin':
                 print('admin')
-                measures = get_measurements(device_id, int(f), int(t),
-                                            group)
+                measures = get_measurements(device_id, int(f), int(t), group)
             else:
                 if device_id not in current_identity['devices']:
                     return abort(404)
                 else:
-                    measures = get_measurements(device_id, int(f), int(t),
-                                                group)
+                    measures = get_measurements(device_id, int(f), int(t), group)
             return jsonify(measures), 200
+
     except Exception as e:
         print(e)
         return abort(400)

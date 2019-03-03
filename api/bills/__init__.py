@@ -18,6 +18,7 @@ def display_bills():
 
     bills_list = []
     for bill in _bills:
-        bills_list.append({"username": bill["username"], "date": bill["date"], "import": bill["price"]})
+        bills_list.append({"username": bill["username"], "date": bill["date"], "import": bill["price"],
+                           "waterflow": bill["waterflow"]})
 
     return jsonify({"bills": bills_list, "count": len(bills_list)})

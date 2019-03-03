@@ -4,7 +4,7 @@ from api.devices import devices_blueprint
 from api.auth import identity, find_user, authenticate
 from api.waterflow import waterflow_blueprint
 from flask_jwt import JWT, jwt_required, current_identity
-
+from flask_cors import CORS
 from api.auth import create_user_blueprint
 from api.alarms import alarms_module
 from api.auth.model import User
@@ -27,6 +27,7 @@ except Exception as e:
 
 
 app = Flask(__name__)
+CORS(app)
 app.config['SECRET_KEY'] = secret
 
 app.register_blueprint(mongo_blueprint)

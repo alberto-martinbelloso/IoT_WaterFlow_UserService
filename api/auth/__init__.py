@@ -33,8 +33,6 @@ def identity(payload):
     return _collection.find_one({'_id': ObjectId(user_id)})
 
 
-
-
 def validate_user(user):
     is_valid = True
     errors = ""

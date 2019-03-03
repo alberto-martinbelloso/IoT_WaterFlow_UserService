@@ -29,6 +29,7 @@ except Exception as e:
 app = Flask(__name__)
 CORS(app)
 app.config['SECRET_KEY'] = secret
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 21600
 
 app.register_blueprint(mongo_blueprint)
 app.register_blueprint(devices_blueprint)

@@ -1,7 +1,6 @@
 from flask import Blueprint
 from api.waterflow.waterflow import get_measurements
 from flask import request, abort, jsonify
-from datetime import datetime
 from flask_jwt import jwt_required, current_identity
 
 import calendar
@@ -14,22 +13,22 @@ waterflow_blueprint = Blueprint('waterflow', __name__)
 def water(device_id=None):
     f = request.args.get('from')
     t = request.args.get('to')
+    group = request.args.get('group')
     try:
-        if f is None:
+        if f is None or t is None:
             return abort(400)
         else:
-            f = datetime.utcfromtimestamp(int(f)).timestamp()
-            if t is None:
-                t = datetime.utcfromtimestamp(dt2ts(datetime.now())).timestamp()
-            else:
-                t = datetime.utcfromtimestamp(int(t)).timestamp()
-            if current_identity['role'] != 'admin':
-                measures = get_measurements(device_id, int(f) * 1000000000, int(t) * 1000000000)
+            t = t * 1000000
+            f = f * 1000000
+            if current_identity['role'] == 'admin':
+                measures = get_measurements(device_id, int(f), int(t),
+                                            group)
             else:
                 if device_id not in current_identity['devices']:
                     return abort(404)
                 else:
-                    measures = get_measurements(device_id, int(f) * 1000000000, int(t) * 1000000000)
+                    measures = get_measurements(device_id, int(f), int(t),
+                                                group)
             return jsonify(measures)
     except Exception as e:
         print(e)

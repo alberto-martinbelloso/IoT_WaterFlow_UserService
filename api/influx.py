@@ -1,7 +1,6 @@
 from influxdb import InfluxDBClient
 import os
 
-host = "localhost"
 port = 8086
 database = "waterflow"
 

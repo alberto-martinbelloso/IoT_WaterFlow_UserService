@@ -9,12 +9,10 @@ def get_measurements(dev_id, f, t, group, origin=""):
         q = "SELECT sum(value) as sum FROM flow WHERE dev_id='{}' AND time >= {} AND time <= {} GROUP BY time({})".format(
             dev_id, f, t, group)
         k = 'sum'
-    print(q)
     results = client.query(q)
     points = results.get_points()
     measurements = []
     for point in points:
-        print(point)
         measurements.append({
             "time": point["time"],
             "dev_id": dev_id,

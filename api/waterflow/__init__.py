@@ -18,9 +18,11 @@ def water(device_id=None):
         if f is None or t is None:
             return abort(400)
         else:
-            t = t * 1000000
-            f = f * 1000000
+            t = int(t) * 1000000
+            f = int(f) * 1000000
+            measures = []
             if current_identity['role'] == 'admin':
+                print('admin')
                 measures = get_measurements(device_id, int(f), int(t),
                                             group)
             else:
@@ -29,7 +31,7 @@ def water(device_id=None):
                 else:
                     measures = get_measurements(device_id, int(f), int(t),
                                                 group)
-            return jsonify(measures)
+            return jsonify(measures), 200
     except Exception as e:
         print(e)
         return abort(400)

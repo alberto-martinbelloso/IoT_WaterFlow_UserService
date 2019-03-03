@@ -21,6 +21,7 @@ def generate_bill(from_day, to_day):
     t = calendar.timegm(to_day.timetuple()) * 1000000000
     users = db['users'].find({})
     prices = db['price'].find().sort([('timestamp', -1)]).limit(1)
+    price = prices[0]['price']
 
     for user in users:
         u = User(user)
@@ -35,13 +36,14 @@ def generate_bill(from_day, to_day):
                 total += m["value"]
 
             bill.waterflow = total
-            bill.price = total * prices[0]['price']
+            bill.price = total * price
 
             insert_json = {
                 "username": bill.username,
                 "date": bill.to_date.strftime("%Y-%m-%d"),
                 "waterflow": bill.waterflow,
-                "price": bill.price
+                "import": bill.price,
+                "price": price
             }
 
             db['bills'].insert(insert_json)

@@ -20,7 +20,7 @@ def water(device_id=None):
         else:
             t = int(t) * 1000000
             f = int(f) * 1000000
-            measures = []
+
             if current_identity['role'] == 'admin':
                 print('admin')
                 measures = get_measurements(device_id, int(f), int(t), group)

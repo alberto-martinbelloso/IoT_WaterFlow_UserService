@@ -9,3 +9,4 @@ Werkzeug==0.14.1
 pymongo==3.5.0
 influxdb==5.2.1
 Flask-JWT
+Flask-Cors==3.0.7

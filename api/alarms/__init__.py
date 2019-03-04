@@ -12,7 +12,8 @@ def get_alarms():
         f = request.args.get('from')
         return jsonify(get_all_alarms(f))
     else:
-        alarms = {}
+        dalarms = []
         for device_id in current_identity['devices']:
-            alarms[device_id] = get_alarms_from_device(device_id)
-        return jsonify(alarms), 200
+            for k in get_alarms_from_device(device_id):
+                dalarms.append(k)
+        return jsonify(dalarms), 200

@@ -12,5 +12,4 @@ def get_all_alarms(f):
     if f is None:
         f = 0
     alarms = db['alarms'].find({}, {'_id': False}).skip(f).limit(20)
-    print(alarms)
     return list(alarms)
